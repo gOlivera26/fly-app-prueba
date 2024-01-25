@@ -28,8 +28,6 @@ public class VueloEntity {
     private String numeroVuelo;
     @Column
     private String fecha;
-    @Column
-    private String hora;
 
     @OneToMany(mappedBy = "vuelo", cascade = CascadeType.ALL)
     private List<DetalleVueloEntity> detallesVuelos = new ArrayList<>();
