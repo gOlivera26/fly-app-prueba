@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DetalleVuelo {
     private Long id;
-    private Vuelo vuelo;
-    //private Avion avion;
     private Integer numeroAsiento;
     private Pasajero pasajero;
 }

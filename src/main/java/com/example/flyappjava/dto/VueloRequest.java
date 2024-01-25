@@ -1,5 +1,7 @@
-package com.example.flyappjava.models;
+package com.example.flyappjava.dto;
 
+import com.example.flyappjava.models.Avion;
+import com.example.flyappjava.models.DetalleVuelo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +13,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Vuelo {
+public class VueloRequest {
     private Long id;
     private String numeroVuelo;
     private String origen;
     private String destino;
     private String fecha;
-    private Avion avion;
-    private List<DetalleVuelo> detalleVuelo;
+    private Long avion;
+    private List<DetalleVueloRequest> detalleVuelo;
 }
