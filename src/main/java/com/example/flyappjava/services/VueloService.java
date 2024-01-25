@@ -13,4 +13,5 @@ import java.util.List;
 public interface VueloService {
     Vuelo createVuelo(VueloRequest vuelo, List<DetalleVueloRequest> detalleVuelo);
     List<VueloResponse> getVuelosConDetalle();
+    VueloResponse getVueloConDetalleByNroVuelo(String numeroVuelo);
 }

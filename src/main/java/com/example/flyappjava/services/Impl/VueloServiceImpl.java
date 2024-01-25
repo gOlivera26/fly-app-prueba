@@ -1,6 +1,7 @@
 package com.example.flyappjava.services.Impl;
 
 import com.example.flyappjava.dto.DetalleVueloRequest;
+import com.example.flyappjava.dto.DetalleVueloResponse;
 import com.example.flyappjava.dto.VueloRequest;
 import com.example.flyappjava.dto.VueloResponse;
 import com.example.flyappjava.entities.AvionEntity;
@@ -141,7 +142,29 @@ public class VueloServiceImpl implements VueloService {
 
     @Override
     public List<VueloResponse> getVuelosConDetalle() {
-        return vueloRepository.findAllWithDetails();
+        List<VueloResponse> vuelos = vueloRepository.findAllWithDetails();
+        for (VueloResponse vuelo : vuelos) {
+            List<DetalleVueloEntity> detallesVuelo = detalleVueloRepository.findByVueloId(vuelo.getVueloId());
+            List<DetalleVueloResponse> detalleVueloResponses = detallesVuelo.stream()
+                    .map(detalle -> new DetalleVueloResponse(detalle.getPasajero().getNombre(), detalle.getPasajero().getApellido(), detalle.getNumeroAsiento()))
+                    .collect(Collectors.toList());
+            vuelo.setDetalleVueloResponses(detalleVueloResponses);
+        }
+        return vuelos;
+    }
+
+    @Override
+    public VueloResponse getVueloConDetalleByNroVuelo(String numeroVuelo) {
+        VueloResponse vuelo = vueloRepository.findByNumeroVueloWithDetails(numeroVuelo).stream().findFirst().orElse(null);
+        if (vuelo == null) {
+            throw new RuntimeException("No se encontró el vuelo con el número: " + numeroVuelo);
+        }
+        List<DetalleVueloEntity> detallesVuelo = detalleVueloRepository.findByVueloId(vuelo.getVueloId());
+        List<DetalleVueloResponse> detalleVueloResponses = detallesVuelo.stream()
+                .map(detalle -> new DetalleVueloResponse(detalle.getPasajero().getNombre(), detalle.getPasajero().getApellido(), detalle.getNumeroAsiento()))
+                .collect(Collectors.toList());
+        vuelo.setDetalleVueloResponses(detalleVueloResponses);
+        return vuelo;
     }
 
     private boolean compararOrigenDestino(String origen, String destino){

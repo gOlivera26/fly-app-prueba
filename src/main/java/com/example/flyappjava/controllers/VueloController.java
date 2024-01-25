@@ -40,4 +40,14 @@ public class VueloController {
             return ResponseEntity.ok(vuelos);
         }
     }
+    @GetMapping("/getVueloConDetalleByNroVuelo/{numeroVuelo}")
+    public ResponseEntity<VueloResponse> getVueloConDetalleByNroVuelo(@PathVariable String numeroVuelo){
+        VueloResponse vuelo = vueloService.getVueloConDetalleByNroVuelo(numeroVuelo);
+        if(vuelo == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(vuelo);
+        }
+    }
 }

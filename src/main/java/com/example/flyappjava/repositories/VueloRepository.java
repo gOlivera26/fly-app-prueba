@@ -4,6 +4,7 @@ import com.example.flyappjava.dto.VueloResponse;
 import com.example.flyappjava.entities.VueloEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,12 +16,18 @@ public interface VueloRepository extends JpaRepository<VueloEntity, Long> {
     boolean existsByNumeroVueloAndFecha(String numeroVuelo, String fecha);
 
 
-        @Query("SELECT new com.example.flyappjava.dto.VueloResponse(v.id, v.origen, v.destino, v.numeroVuelo, v.fecha, p.nombre, p.apellido, dv.numeroAsiento, tp.descripcion) " +
-                "FROM VueloEntity v " +
-                "JOIN v.detallesVuelos dv " +
-                "JOIN dv.pasajero p " +
-                "JOIN v.avion av " +
-                "JOIN av.tipoAvion tp")
-        List<VueloResponse> findAllWithDetails();
+    @Query("SELECT new com.example.flyappjava.dto.VueloResponse(v.id, v.origen, v.destino, v.numeroVuelo, v.fecha, av.tipoAvion.descripcion) " +
+            "FROM VueloEntity v " +
+            "JOIN v.avion av")
+    List<VueloResponse> findAllWithDetails();
+
+
+    @Query("SELECT new com.example.flyappjava.dto.VueloResponse(v.id, v.origen, v.destino, v.numeroVuelo, v.fecha, av.tipoAvion.descripcion) " +
+            "FROM VueloEntity v " +
+            "JOIN v.avion av " +
+            "WHERE v.numeroVuelo = :numeroVuelo")
+    List<VueloResponse> findByNumeroVueloWithDetails(@Param("numeroVuelo") String numeroVuelo);
+
 
 }
+
