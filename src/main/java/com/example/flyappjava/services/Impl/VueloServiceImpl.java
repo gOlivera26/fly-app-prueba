@@ -142,27 +142,38 @@ public class VueloServiceImpl implements VueloService {
 
     @Override
     public List<VueloResponse> getVuelosConDetalle() {
+        // Obtenemos todos los vuelos con sus detalles desde el repositorio
         List<VueloResponse> vuelos = vueloRepository.findAllWithDetails();
+
         for (VueloResponse vuelo : vuelos) {
+            // Obtenemos los detalles del vuelo para el vuelo actual
             List<DetalleVueloEntity> detallesVuelo = detalleVueloRepository.findByVueloId(vuelo.getVueloId());
+
+            // Mapeamos cada detalle del vuelo a un DetalleVueloResponse y los guardamos en una lista
             List<DetalleVueloResponse> detalleVueloResponses = detallesVuelo.stream()
                     .map(detalle -> new DetalleVueloResponse(detalle.getPasajero().getNombre(), detalle.getPasajero().getApellido(), detalle.getNumeroAsiento()))
                     .collect(Collectors.toList());
+
             vuelo.setDetalleVueloResponses(detalleVueloResponses);
         }
         return vuelos;
     }
-
     @Override
     public VueloResponse getVueloConDetalleByNroVuelo(String numeroVuelo) {
+        // Obtenemos el vuelo con el número de vuelo proporcionado desde el repositorio
         VueloResponse vuelo = vueloRepository.findByNumeroVueloWithDetails(numeroVuelo).stream().findFirst().orElse(null);
         if (vuelo == null) {
             throw new RuntimeException("No se encontró el vuelo con el número: " + numeroVuelo);
         }
+
+        // Obtenemos los detalles del vuelo para el vuelo encontrado
         List<DetalleVueloEntity> detallesVuelo = detalleVueloRepository.findByVueloId(vuelo.getVueloId());
+
+        // Mapeamos cada detalle del vuelo a un DetalleVueloResponse y los guardamos en una lista
         List<DetalleVueloResponse> detalleVueloResponses = detallesVuelo.stream()
                 .map(detalle -> new DetalleVueloResponse(detalle.getPasajero().getNombre(), detalle.getPasajero().getApellido(), detalle.getNumeroAsiento()))
                 .collect(Collectors.toList());
+
         vuelo.setDetalleVueloResponses(detalleVueloResponses);
         return vuelo;
     }
