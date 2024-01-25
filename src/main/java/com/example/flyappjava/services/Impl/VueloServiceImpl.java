@@ -41,43 +41,6 @@ public class VueloServiceImpl implements VueloService {
         this.vueloRepository = vueloRepository;
     }
 
-   /* @Override
-    public Vuelo createVuelo(VueloRequest vuelo, List<DetalleVueloRequest> detallesVuelo) {
-        VueloEntity vueloEntity = modelMapper.map(vuelo, VueloEntity.class);
-        AvionEntity avionEntity = avionRepository.findById(vuelo.getAvion()).orElse(null);
-
-        if (avionEntity == null) {
-            throw new RuntimeException("El avion no existe");
-        }
-
-        vueloEntity.setAvion(avionEntity);
-        vueloRepository.save(vueloEntity);
-
-        for (DetalleVueloRequest detalleVueloLista : detallesVuelo) {
-            DetalleVueloEntity detalleVueloEntity = modelMapper.map(detalleVueloLista, DetalleVueloEntity.class);
-
-            PasajeroEntity pasajeroEntity = pasajeroRepository.findById(detalleVueloLista.getPasajero()).orElse(null);
-
-            if (pasajeroEntity == null) {
-                throw new RuntimeException("El pasajero no existe");
-            } else {
-                detalleVueloEntity.setPasajero(pasajeroEntity);
-            }
-
-            detalleVueloEntity.setVuelo(vueloEntity);
-
-            detalleVueloRepository.save(detalleVueloEntity);
-            vueloEntity.getDetallesVuelos().add(detalleVueloEntity);
-        }
-
-        vueloRepository.save(vueloEntity);
-
-        Vuelo vueloResult = modelMapper.map(vueloRepository.save(vueloEntity), Vuelo.class);
-
-        return vueloResult;
-    }
-
-    */
    @Override
    @Transactional
    public Vuelo createVuelo(VueloRequest vuelo, List<DetalleVueloRequest> detallesVuelo) {
