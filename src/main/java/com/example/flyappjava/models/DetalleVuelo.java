@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DetalleVuelo {
     private Long id;
-    private Integer numeroAsiento; //hacer string para hacer 1A
+    private String numeroAsiento;
     private Pasajero pasajero;
 }

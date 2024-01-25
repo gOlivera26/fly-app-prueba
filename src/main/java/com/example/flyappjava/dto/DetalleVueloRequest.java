@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class DetalleVueloRequest {
     private Long id;
     private Long vuelo;
-    private Integer numeroAsiento;
+    private String numeroAsiento;
     private Long pasajero;
 }
