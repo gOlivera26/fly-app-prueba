@@ -2,6 +2,7 @@ package com.example.flyappjava.services.Impl;
 
 import com.example.flyappjava.dto.DetalleVueloRequest;
 import com.example.flyappjava.dto.VueloRequest;
+import com.example.flyappjava.dto.VueloResponse;
 import com.example.flyappjava.entities.AvionEntity;
 import com.example.flyappjava.entities.DetalleVueloEntity;
 import com.example.flyappjava.entities.PasajeroEntity;
@@ -114,9 +115,7 @@ public class VueloServiceImpl implements VueloService {
             }
         }
 
-        String origen = vueloEntity.getOrigen();
-        String destino = vueloEntity.getDestino();
-        if(origen.equals(destino)){
+        if(compararOrigenDestino(vueloEntity.getOrigen(), vueloEntity.getDestino())){
             throw new RuntimeException("El origen y el destino no pueden ser iguales");
         }
 
@@ -138,5 +137,18 @@ public class VueloServiceImpl implements VueloService {
                 .fecha(vueloResult.getFecha())
                 .detalleVuelo(detalleVueloList) // Setea la lista de DetalleVuelo
                 .build();
+    }
+
+    @Override
+    public List<VueloResponse> getVuelosConDetalle() {
+        return vueloRepository.findAllWithDetails();
+    }
+
+    private boolean compararOrigenDestino(String origen, String destino){
+        boolean bandera = false;
+        if(origen.equals(destino)){
+            bandera = true;
+        }
+        return bandera;
     }
 }

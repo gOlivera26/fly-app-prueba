@@ -1,15 +1,13 @@
 package com.example.flyappjava.controllers;
 
 import com.example.flyappjava.dto.VueloRequest;
+import com.example.flyappjava.dto.VueloResponse;
 import com.example.flyappjava.models.DetalleVuelo;
 import com.example.flyappjava.models.Vuelo;
 import com.example.flyappjava.services.VueloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +28,16 @@ public class VueloController {
         }
         else{
             return ResponseEntity.ok(createdVuelo);
+        }
+    }
+    @GetMapping("/getVuelosConDetalle")
+    public ResponseEntity<List<VueloResponse>> getVuelosDetalle(){
+        List<VueloResponse> vuelos = vueloService.getVuelosConDetalle();
+        if(vuelos == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(vuelos);
         }
     }
 }
