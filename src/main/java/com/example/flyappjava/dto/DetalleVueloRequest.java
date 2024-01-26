@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DetalleVueloRequest {
     private Long id;
-    private Long vuelo;
     private String numeroAsiento;
     private Long pasajero;
 }

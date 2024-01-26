@@ -206,23 +206,31 @@ public class VueloServiceImpl implements VueloService {
     @Override
     @Transactional
     public DetalleVueloResponse createDetalleVuelo(Long vueloId, DetalleVueloRequest detalleVueloRequest) {
-        // Buscamos el vuelo por su ID
         VueloEntity vueloEntity = vueloRepository.findById(vueloId).orElseThrow(() -> new RuntimeException("No se encontró el vuelo con el ID: " + vueloId));
+        List<DetalleVueloEntity> detalleVueloEntity = detalleVueloRepository.findByVueloId(vueloId);
+        for(DetalleVueloEntity detallesVuelo : detalleVueloEntity){
+            if(detallesVuelo.getNumeroAsiento().equals(detalleVueloRequest.getNumeroAsiento())){
+                throw new RuntimeException("El asiento: "+detallesVuelo.getNumeroAsiento()+" ya ha sido asignado a "+detallesVuelo.getPasajero().getApellido()+" "+detallesVuelo.getPasajero().getNombre());
+            }
+            if(detallesVuelo.getPasajero().getId().equals(detalleVueloRequest.getPasajero())){
+                throw new RuntimeException("El pasajero ya ha sido asignado al vuelo");
+                }
+            if(vueloEntity.getAvion().getCapacidad() <= detalleVueloEntity.size()){
+                throw new RuntimeException("El avion "+ vueloEntity.getAvion().getTipoAvion().getDescripcion()+" no tiene capacidad para más pasajeros.|CANTIDAD LIMITE AVION: "+vueloEntity.getAvion().getCapacidad());
+            }
+        }
+        PasajeroEntity pasajeroEntity = pasajeroRepository.findById(detalleVueloRequest.getPasajero()).orElseThrow(() -> new RuntimeException("El pasajero no existe"));
 
-        // Mapeamos el DetalleVueloRequest a un DetalleVueloEntity
-        DetalleVueloEntity detalleVueloEntity = modelMapper.map(detalleVueloRequest, DetalleVueloEntity.class);
+        DetalleVueloEntity nuevoDetalleVueloEntity = modelMapper.map(detalleVueloRequest, DetalleVueloEntity.class);
+        nuevoDetalleVueloEntity.setPasajero(pasajeroEntity);
+        nuevoDetalleVueloEntity.setVuelo(vueloEntity);
 
-        // Establecemos el vuelo en el detalle del vuelo
-        detalleVueloEntity.setVuelo(vueloEntity);
+        detalleVueloRepository.save(nuevoDetalleVueloEntity);
+        vueloEntity.getDetallesVuelos().add(nuevoDetalleVueloEntity);
 
-        // Guardamos el detalle del vuelo en la base de datos
-        detalleVueloRepository.save(detalleVueloEntity);
+        vueloRepository.save(vueloEntity);
 
-        // Añadimos el detalle del vuelo a la lista de detalles del vuelo en el vuelo
-        vueloEntity.getDetallesVuelos().add(detalleVueloEntity);
-
-        // Mapeamos el DetalleVueloEntity a un DetalleVueloResponse y lo devolvemos
-        return modelMapper.map(detalleVueloEntity, DetalleVueloResponse.class);
+        return modelMapper.map(nuevoDetalleVueloEntity, DetalleVueloResponse.class);
     }
 
     private boolean compararOrigenDestino(String origen, String destino){
