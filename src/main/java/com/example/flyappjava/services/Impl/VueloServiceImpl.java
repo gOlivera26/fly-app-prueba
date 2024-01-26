@@ -144,6 +144,9 @@ public class VueloServiceImpl implements VueloService {
     public List<VueloResponse> getVuelosConDetalle() {
         // Obtenemos todos los vuelos con sus detalles desde el repositorio
         List<VueloResponse> vuelos = vueloRepository.findAllWithDetails();
+        if(vuelos.isEmpty()){
+            throw new RuntimeException("No se encontraron vuelos");
+        }
 
         for (VueloResponse vuelo : vuelos) {
             // Obtenemos los detalles del vuelo para el vuelo actual
@@ -176,6 +179,22 @@ public class VueloServiceImpl implements VueloService {
 
         vuelo.setDetalleVueloResponses(detalleVueloResponses);
         return vuelo;
+    }
+
+    @Override
+    public List<VueloResponse> getVueloConDetalleByFecha(String fecha) {
+        List<VueloResponse> vuelos = vueloRepository.findByFechaVueloWithDetails(fecha);
+        if (vuelos.isEmpty()) {
+            throw new RuntimeException("No se encontraron vuelos para la fecha: " + fecha);
+        }
+        for(VueloResponse vueloResponse : vuelos){
+            List<DetalleVueloEntity> detallesVuelo = detalleVueloRepository.findByVueloId(vueloResponse.getVueloId());
+            List<DetalleVueloResponse> detalleVueloResponses = detallesVuelo.stream()
+                    .map(detalle -> new DetalleVueloResponse(detalle.getPasajero().getNombre(), detalle.getPasajero().getApellido(), detalle.getNumeroAsiento()))
+                    .collect(Collectors.toList());
+            vueloResponse.setDetalleVueloResponses(detalleVueloResponses);
+        }
+        return vuelos;
     }
 
     private boolean compararOrigenDestino(String origen, String destino){

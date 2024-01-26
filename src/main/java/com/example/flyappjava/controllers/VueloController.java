@@ -50,4 +50,14 @@ public class VueloController {
             return ResponseEntity.ok(vuelo);
         }
     }
+    @GetMapping("/getVueloConDetalleByFecha")
+    public ResponseEntity<List<VueloResponse>> getVueloConDetalleByFecha(@RequestParam String fecha){
+        List<VueloResponse> vuelos = vueloService.getVueloConDetalleByFecha(fecha);
+        if(vuelos == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(vuelos);
+        }
+    }
 }

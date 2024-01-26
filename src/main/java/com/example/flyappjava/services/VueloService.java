@@ -14,4 +14,5 @@ public interface VueloService {
     Vuelo createVuelo(VueloRequest vuelo, List<DetalleVueloRequest> detalleVuelo);
     List<VueloResponse> getVuelosConDetalle();
     VueloResponse getVueloConDetalleByNroVuelo(String numeroVuelo);
+    List<VueloResponse> getVueloConDetalleByFecha(String fecha);
 }

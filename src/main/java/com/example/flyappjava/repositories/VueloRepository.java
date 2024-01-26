@@ -27,6 +27,11 @@ public interface VueloRepository extends JpaRepository<VueloEntity, Long> {
             "JOIN v.avion av " +
             "WHERE v.numeroVuelo = :numeroVuelo")
     List<VueloResponse> findByNumeroVueloWithDetails(@Param("numeroVuelo") String numeroVuelo);
+    @Query("SELECT new com.example.flyappjava.dto.VueloResponse(v.id, v.origen, v.destino, v.numeroVuelo, v.fecha, av.tipoAvion.descripcion) " +
+            "FROM VueloEntity v " +
+            "JOIN v.avion av " +
+            "WHERE v.fecha = :fecha")
+    List<VueloResponse> findByFechaVueloWithDetails(@Param("fecha") String fecha);
 
 
 }
