@@ -1,5 +1,7 @@
 package com.example.flyappjava.controllers;
 
+import com.example.flyappjava.dto.DetalleVueloRequest;
+import com.example.flyappjava.dto.DetalleVueloResponse;
 import com.example.flyappjava.dto.VueloRequest;
 import com.example.flyappjava.dto.VueloResponse;
 import com.example.flyappjava.models.DetalleVuelo;
@@ -58,6 +60,16 @@ public class VueloController {
         }
         else{
             return ResponseEntity.ok(vuelos);
+        }
+    }
+    @PostMapping("/createDetalleVuelo/{vueloId}")
+    public ResponseEntity<DetalleVueloResponse> createDetalleVuelo(@PathVariable Long vueloId, @RequestBody DetalleVueloRequest detalleVueloRequest){
+        DetalleVueloResponse createdDetalleVuelo = vueloService.createDetalleVuelo(vueloId, detalleVueloRequest);
+        if(createdDetalleVuelo == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(createdDetalleVuelo);
         }
     }
 }

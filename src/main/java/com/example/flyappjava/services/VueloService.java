@@ -1,6 +1,7 @@
 package com.example.flyappjava.services;
 
 import com.example.flyappjava.dto.DetalleVueloRequest;
+import com.example.flyappjava.dto.DetalleVueloResponse;
 import com.example.flyappjava.dto.VueloRequest;
 import com.example.flyappjava.dto.VueloResponse;
 import com.example.flyappjava.models.DetalleVuelo;
@@ -15,4 +16,5 @@ public interface VueloService {
     List<VueloResponse> getVuelosConDetalle();
     VueloResponse getVueloConDetalleByNroVuelo(String numeroVuelo);
     List<VueloResponse> getVueloConDetalleByFecha(String fecha);
+    DetalleVueloResponse createDetalleVuelo(Long vueloId, DetalleVueloRequest detalleVueloRequest);
 }
