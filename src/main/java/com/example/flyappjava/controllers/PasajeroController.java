@@ -58,4 +58,34 @@ public class PasajeroController {
             return ResponseEntity.ok(updatedTipoDocumento);
         }
     }
+    @GetMapping("/getAllTipoDocumento")
+    public ResponseEntity<List<TipoDocumento>> getAllTipoDocumento(){
+        List<TipoDocumento> tipoDocumentos = pasajeroService.getAllTipoDocumento();
+        if(tipoDocumentos == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(tipoDocumentos);
+        }
+    }
+    @GetMapping("/getPasajeroByNroDoc/{numeroDocumento}")
+    public ResponseEntity<Pasajero> getPasajeroByNroDoc(@PathVariable String numeroDocumento){
+        Pasajero pasajero = pasajeroService.getPasajeroByNroDoc(numeroDocumento);
+        if(pasajero == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(pasajero);
+        }
+    }
+    @PutMapping("/cambiarEstado/{numeroDocumento}")
+    public Boolean cambiarEstado(@PathVariable String numeroDocumento){
+        if(numeroDocumento.isEmpty()){
+            throw new RuntimeException("El numero de documento no puede ser nulo");
+        }
+        else{
+            return pasajeroService.cambiarEstado(numeroDocumento);
+        }
+    }
+
 }

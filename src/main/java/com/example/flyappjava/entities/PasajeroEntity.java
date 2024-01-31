@@ -25,4 +25,6 @@ public class PasajeroEntity {
     private String numeroDocumento;
     @Column
     private String email;
+    @Column
+    private Boolean estado; // true = activo, false = inactivo
 }

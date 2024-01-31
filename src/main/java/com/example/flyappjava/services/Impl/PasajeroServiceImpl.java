@@ -34,6 +34,7 @@ public class PasajeroServiceImpl implements PasajeroService {
             throw new RuntimeException("El tipo de documento no puede ser nulo");
         }
         PasajeroEntity pasajeroEntity = modelMapper.map(pasajero, PasajeroEntity.class);
+        pasajeroEntity.setEstado(true);
         pasajeroEntity = pasajeroRepository.save(pasajeroEntity);
         return modelMapper.map(pasajeroEntity, Pasajero.class);
     }
@@ -42,6 +43,30 @@ public class PasajeroServiceImpl implements PasajeroService {
     public List<Pasajero> getAllPasajero() {
         List<PasajeroEntity> pasajeroEntities = pasajeroRepository.findAll();
         return pasajeroEntities.stream().map(pasajeroEntity -> modelMapper.map(pasajeroEntity, Pasajero.class)).toList();
+    }
+
+    @Override
+    public Pasajero getPasajeroByNroDoc(String numeroDocumento) {
+        PasajeroEntity pasajeroEntity = pasajeroRepository.findByNumeroDocumento(numeroDocumento);
+        if(pasajeroEntity == null){
+            throw new RuntimeException("Pasajero no encontrado");
+        }
+        return modelMapper.map(pasajeroEntity, Pasajero.class);
+    }
+
+    @Override
+    public Boolean cambiarEstado(String numeroDocumento) {
+        PasajeroEntity pasajeroEntity = pasajeroRepository.findByNumeroDocumento(numeroDocumento);
+        if(pasajeroEntity == null){
+            throw new RuntimeException("Pasajero no encontrado");
+        }
+        Boolean estado = pasajeroEntity.getEstado();
+        if(estado == null){
+            throw new RuntimeException("Estado del pasajero es nulo");
+        }
+        pasajeroEntity.setEstado(!estado);
+        pasajeroRepository.save(pasajeroEntity);
+        return pasajeroEntity.getEstado();
     }
 
     @Override
@@ -68,5 +93,11 @@ public class PasajeroServiceImpl implements PasajeroService {
             throw new RuntimeException("Tipo de documento no encontrado");
         }
 
+    }
+
+    @Override
+    public List<TipoDocumento> getAllTipoDocumento() {
+        List<TipoDocumentoEntity> tipoDocumentoEntities = tipoDocumentoRepository.findAll();
+        return tipoDocumentoEntities.stream().map(tipoDocumentoEntity -> modelMapper.map(tipoDocumentoEntity, TipoDocumento.class)).toList();
     }
 }

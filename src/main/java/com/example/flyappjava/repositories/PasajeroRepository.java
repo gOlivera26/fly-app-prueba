@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PasajeroRepository extends JpaRepository<PasajeroEntity, Long> {
+    PasajeroEntity findByNumeroDocumento(String numeroDocumento);
 }

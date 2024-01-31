@@ -14,4 +14,5 @@ public class Pasajero {
     private TipoDocumento tipoDocumento;
     private String numeroDocumento;
     private String email;
+    private Boolean estado; // true: activo, false: inactivo
 }
