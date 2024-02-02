@@ -23,4 +23,6 @@ public class AvionEntity {
     private TipoAvionEntity tipoAvion;
     @Column
     private Integer capacidad;
+    @Column
+    private Boolean estado;
 }

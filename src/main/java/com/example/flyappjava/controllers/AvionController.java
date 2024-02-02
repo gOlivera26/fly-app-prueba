@@ -57,6 +57,16 @@ public class AvionController {
             return ResponseEntity.ok(tipoAviones);
         }
     }
+    @GetMapping("/getAvionByMatricula/{matricula}")
+    public ResponseEntity<Avion> getAvionByMatricula(@PathVariable("matricula") String matricula){
+        Avion avion = avionService.getAvionByMatricula(matricula);
+        if(avion == null){
+            return ResponseEntity.badRequest().body(null);
+        }
+        else{
+            return ResponseEntity.ok(avion);
+        }
+    }
     @PutMapping("/updateTipoAvion")
     public ResponseEntity<TipoAvion> updateTipoAvion(@RequestBody TipoAvion tipoAvion){
         TipoAvion tipoAvionSaved = avionService.updateTipoAvion(tipoAvion);

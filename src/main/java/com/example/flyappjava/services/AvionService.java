@@ -14,6 +14,7 @@ public interface AvionService {
     Avion updateAvion(Avion avion);
     TipoAvion deleteTipoAvion(Long id);
     Avion deleteAvionById(Long id);
+    Avion getAvionByMatricula(String matricula);
     List<Avion> getAllAviones();
     List<TipoAvion> getAllTipoAviones();
     List<Avion> getAvionByTipoAvion(Long id);

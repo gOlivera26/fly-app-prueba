@@ -32,6 +32,7 @@ public class AvionServiceImpl implements AvionService {
             throw new RuntimeException("El tipo de avion no puede ser nulo");
         }
         AvionEntity avionEntity = modelMapper.map(avion, AvionEntity.class);
+        avionEntity.setEstado(true);
         avionEntity = avionRepository.save(avionEntity);
         return modelMapper.map(avionEntity, Avion.class);
     }
@@ -103,6 +104,17 @@ public class AvionServiceImpl implements AvionService {
         }
         else {
             throw new RuntimeException("No se encontro al avion con ID: "+id);
+        }
+    }
+
+    @Override
+    public Avion getAvionByMatricula(String matricula) {
+        Optional<AvionEntity> avion = avionRepository.findByMatricula(matricula);
+        if(avion.isPresent()){
+            return modelMapper.map(avion.get(), Avion.class);
+        }
+        else{
+            throw new RuntimeException("No se encontro al avion con matricula: "+matricula);
         }
     }
 

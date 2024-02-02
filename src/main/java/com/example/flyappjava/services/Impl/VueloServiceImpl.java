@@ -67,6 +67,11 @@ public class VueloServiceImpl implements VueloService {
             throw new RuntimeException("El avion ya ha sido asignado para la misma fecha");
         }
 
+        boolean avionActivo = avionEntity.getEstado();
+        if(!avionActivo){
+            throw new RuntimeException("El avion no está activo");
+        }
+
         vueloEntity.setAvion(avionEntity);
         vueloRepository.save(vueloEntity);
 
@@ -82,6 +87,11 @@ public class VueloServiceImpl implements VueloService {
             PasajeroEntity pasajeroEntity = pasajeroRepository.findById(detalleVueloLista.getPasajero()).orElse(null);
 
             if (pasajeroEntity != null){
+
+                boolean pasajeroActivo = pasajeroEntity.getEstado();
+                if(!pasajeroActivo){
+                    throw new RuntimeException("El pasajero no está activo");
+                }
 
                 // Verificar si el pasajero ya ha sido asignado al vuelo
                 boolean pasajeroYaAsignado = vueloEntity.getDetallesVuelos().stream()
@@ -220,6 +230,11 @@ public class VueloServiceImpl implements VueloService {
             }
         }
         PasajeroEntity pasajeroEntity = pasajeroRepository.findById(detalleVueloRequest.getPasajero()).orElseThrow(() -> new RuntimeException("El pasajero no existe"));
+
+        boolean pasajeroActivo = pasajeroEntity.getEstado();
+        if(!pasajeroActivo){
+            throw new RuntimeException("El pasajero no está activo");
+        }
 
         DetalleVueloEntity nuevoDetalleVueloEntity = modelMapper.map(detalleVueloRequest, DetalleVueloEntity.class);
         nuevoDetalleVueloEntity.setPasajero(pasajeroEntity);

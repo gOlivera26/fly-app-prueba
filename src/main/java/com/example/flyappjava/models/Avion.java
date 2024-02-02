@@ -12,4 +12,5 @@ public class Avion {
     private String matricula;
     private TipoAvion tipoAvion;
     private Integer capacidad;
+    private Boolean estado;
 }
