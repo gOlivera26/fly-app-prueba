@@ -10,9 +10,12 @@ import java.util.List;
 public interface PasajeroService {
     Pasajero createPasajero(Pasajero pasajero);
     List<Pasajero> getAllPasajero();
+    List<Pasajero> getAllPasajerosByEstado(Boolean estado);
     Pasajero getPasajeroByNroDoc(String numeroDocumento);
     Boolean cambiarEstado(String numeroDocumento);
     TipoDocumento createTipoDocumento(TipoDocumento tipoDocumento);
     TipoDocumento updateTipoDocumento(TipoDocumento tipoDocumento);
     List<TipoDocumento> getAllTipoDocumento();
+    Boolean numeroDocumentoExist(String numeroDocumento);
+    Boolean emailExist(String email);
 }

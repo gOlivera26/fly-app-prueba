@@ -33,9 +33,18 @@ public class PasajeroServiceImpl implements PasajeroService {
         if(pasajero.getTipoDocumento().getId() == null) {
             throw new RuntimeException("El tipo de documento no puede ser nulo");
         }
+        List<PasajeroEntity> pasajeroEntities = pasajeroRepository.findAll();
+        for(PasajeroEntity pasajeroEntity: pasajeroEntities) {
+            if (pasajeroEntity.getNumeroDocumento().equals(pasajero.getNumeroDocumento())) {
+                throw new RuntimeException("Numero de documento en uso");
+            } else if (pasajeroEntity.getEmail().equals(pasajero.getEmail())) {
+                throw new RuntimeException("El Email esta en uso");
+            }
+        }
+
         PasajeroEntity pasajeroEntity = modelMapper.map(pasajero, PasajeroEntity.class);
         pasajeroEntity.setEstado(true);
-        pasajeroEntity = pasajeroRepository.save(pasajeroEntity);
+        pasajeroRepository.save(pasajeroEntity);
         return modelMapper.map(pasajeroEntity, Pasajero.class);
     }
 
@@ -43,6 +52,12 @@ public class PasajeroServiceImpl implements PasajeroService {
     public List<Pasajero> getAllPasajero() {
         List<PasajeroEntity> pasajeroEntities = pasajeroRepository.findAll();
         return pasajeroEntities.stream().map(pasajeroEntity -> modelMapper.map(pasajeroEntity, Pasajero.class)).toList();
+    }
+
+    @Override
+    public List<Pasajero> getAllPasajerosByEstado(Boolean estado) {
+        List<PasajeroEntity> pasajeroEntities = pasajeroRepository.findByEstado(estado);
+        return  pasajeroEntities.stream().map(pasajeroEntity -> modelMapper.map(pasajeroEntity, Pasajero.class)).toList();
     }
 
     @Override
@@ -99,5 +114,17 @@ public class PasajeroServiceImpl implements PasajeroService {
     public List<TipoDocumento> getAllTipoDocumento() {
         List<TipoDocumentoEntity> tipoDocumentoEntities = tipoDocumentoRepository.findAll();
         return tipoDocumentoEntities.stream().map(tipoDocumentoEntity -> modelMapper.map(tipoDocumentoEntity, TipoDocumento.class)).toList();
+    }
+
+    @Override
+    public Boolean numeroDocumentoExist(String numeroDocumento) {
+        PasajeroEntity pasajeroEntity = pasajeroRepository.findByNumeroDocumento(numeroDocumento);
+        return pasajeroEntity != null;
+    }
+
+    @Override
+    public Boolean emailExist(String email) {
+        PasajeroEntity pasajeroEntity = pasajeroRepository.findByEmail(email);
+        return pasajeroEntity != null;
     }
 }
